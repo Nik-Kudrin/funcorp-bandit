@@ -1,1 +1,3 @@
-# spring-boot-content
+Spring Boot service, that provides content to user by sorting it via UCB1 algorithm.
+
+Assumptions and restrictions ...
