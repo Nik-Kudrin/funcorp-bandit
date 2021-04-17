@@ -1,6 +1,6 @@
-package com.funcorp.springbootcontent.content.service
+package com.funcorp.bandit.content.service
 
-import com.funcorp.springbootcontent.content.model.Content
+import com.funcorp.bandit.content.model.Content
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 

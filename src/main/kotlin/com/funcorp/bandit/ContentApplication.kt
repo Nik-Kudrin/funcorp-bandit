@@ -1,13 +1,12 @@
-package com.funcorp.springbootcontent
+package com.funcorp.bandit
 
-import com.funcorp.springbootcontent.content.repository.IContentRepository
+import com.funcorp.bandit.content.repository.IContentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.boot.runApplication
 import org.springframework.context.event.EventListener
-
 
 @EnableAutoConfiguration
 @SpringBootApplication

@@ -1,4 +1,4 @@
-REST service, that provides content to user by sorting it via UCB1 algorithm. (Multi-Armed Bandit algorithm)  
+REST service, that gives content sorted by UCB1 algorithm. (Multi-Armed Bandit algorithm)  
 Spring Boot, Kotlin
 
 *TODO:* Assumptions and restrictions ...
@@ -20,10 +20,10 @@ where `/opt/mongodb_volume` - your local data volume for mongo
 
 3) Endpoints
    - Get list of content, using UCB1 `/play/{userId}`
-   - Add new content `/content/add?id={id}&timestam={unix_timestamp}`
+   - Add new content `/content/add?id={id}&createdOn={unix_timestamp}`
    - Get content info `/content/{id}`
-   - Add view to content `/content/{id}/add/view?userId={userId}`
-   - Add like to content `/content/{id}/add/like?userId={userId}`
+   - Add view to content `/content/{id}/views/add?userId={userId}&watchedOn={unix_timestamp}`
+   - Add like to content `/content/{id}/likes/add?userId={userId}&likedOn={unix_timestamp}`
 
 #### TODO
 

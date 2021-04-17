@@ -1,6 +1,6 @@
-package com.funcorp.springbootcontent.integrationtests
+package com.funcorp.bandit.integrationtests
 
-import com.funcorp.springbootcontent.content.model.Content
+import com.funcorp.bandit.content.model.Content
 import com.github.javafaker.Faker
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory

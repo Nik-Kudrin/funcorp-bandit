@@ -1,4 +1,4 @@
-package com.funcorp.springbootcontent.content.model
+package com.funcorp.bandit.content.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

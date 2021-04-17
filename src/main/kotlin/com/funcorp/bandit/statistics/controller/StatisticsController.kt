@@ -1,4 +1,4 @@
-package com.funcorp.springbootcontent.statistics.controller
+package com.funcorp.bandit.statistics.controller
 
 import org.springframework.web.bind.annotation.RestController
 

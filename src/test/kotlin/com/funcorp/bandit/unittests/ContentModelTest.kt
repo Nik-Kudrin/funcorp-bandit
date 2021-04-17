@@ -1,6 +1,6 @@
-package com.funcorp.springbootcontent.unittests
+package com.funcorp.bandit.unittests
 
-import com.funcorp.springbootcontent.content.model.Content
+import com.funcorp.bandit.content.model.Content
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory

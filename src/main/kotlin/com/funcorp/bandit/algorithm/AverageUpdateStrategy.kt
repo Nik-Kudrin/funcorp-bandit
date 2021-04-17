@@ -1,4 +1,4 @@
-package com.funcorp.springbootcontent.algorithm
+package com.funcorp.bandit.algorithm
 
 class AverageUpdateStrategy : IUpdateStrategy {
     override fun update(numberOptionsToChoose: Int, value: Double, reward: Double): Double {

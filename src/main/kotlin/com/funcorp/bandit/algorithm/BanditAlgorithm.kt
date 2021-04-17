@@ -1,7 +1,7 @@
-package com.funcorp.springbootcontent.algorithm
+package com.funcorp.bandit.algorithm
 
 abstract class BanditAlgorithm {
-    protected var numberOptionsToChoose = 0
+    protected var totalItemsNumber = 0
     protected var counts: IntArray
     protected var values: DoubleArray
 
@@ -10,17 +10,17 @@ abstract class BanditAlgorithm {
             field = requireNotNull(updateStrategy)
         }
 
-    constructor(numberOptionsToChoose: Int) {
-        this.numberOptionsToChoose = numberOptionsToChoose
-        counts = IntArray(numberOptionsToChoose)
-        values = DoubleArray(numberOptionsToChoose)
+    constructor(totalItemsNumber: Int) {
+        this.totalItemsNumber = totalItemsNumber
+        counts = IntArray(totalItemsNumber)
+        values = DoubleArray(totalItemsNumber)
     }
 
     abstract fun selectOption(): Int
 
-    open fun update(arm: Int, reward: Double) {
-        counts[arm]++
-        values[arm] = updateStrategy.update(counts[arm], values[arm], reward)
+    open fun update(itemIndex: Int, reward: Double) {
+        counts[itemIndex]++
+        values[itemIndex] = updateStrategy.update(counts[itemIndex], values[itemIndex], reward)
     }
 
     open fun reset() {

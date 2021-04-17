@@ -1,6 +1,6 @@
-package com.funcorp.springbootcontent.play.controller
+package com.funcorp.bandit.play.controller
 
-import com.funcorp.springbootcontent.algorithm.Ucb1Algorithm
+import com.funcorp.bandit.algorithm.Ucb1Algorithm
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,6 +17,6 @@ class PlayController {
         //ContentId, отсортированный по алгоритму UCB1. Если контента не хватает, то вернуть
         //сколько есть.
 
-        return Ucb1Algorithm(numberOptionsToChoose = 100).selectOption()
+        return Ucb1Algorithm(totalItemsNumber = 100).selectOption()
     }
 }

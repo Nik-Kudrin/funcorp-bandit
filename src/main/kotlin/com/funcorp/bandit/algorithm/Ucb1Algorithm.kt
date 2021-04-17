@@ -1,4 +1,4 @@
-package com.funcorp.springbootcontent.algorithm
+package com.funcorp.bandit.algorithm
 
 import kotlin.math.ln
 import kotlin.math.sqrt
@@ -11,7 +11,7 @@ import kotlin.math.sqrt
  */
 class Ucb1Algorithm : BanditAlgorithm {
 
-    constructor(numberOptionsToChoose: Int) : super(numberOptionsToChoose)
+    constructor(totalItemsNumber: Int) : super(totalItemsNumber)
 
     override fun selectOption(): Int {
         var totalCount = 0
@@ -24,9 +24,9 @@ class Ucb1Algorithm : BanditAlgorithm {
             totalCount += count
         }
 
-        val ucbValues = DoubleArray(numberOptionsToChoose)
+        val ucbValues = DoubleArray(totalItemsNumber)
 
-        for (index in 0 until numberOptionsToChoose) {
+        for (index in 0 until totalItemsNumber) {
             val bonus = sqrt(2 * ln(totalCount.toDouble()) / counts[index])
             ucbValues[index] = values[index] + bonus
         }
@@ -34,8 +34,8 @@ class Ucb1Algorithm : BanditAlgorithm {
         var maxIndex = 0
 
         for (index in 1 until ucbValues.size) {
-            val newValue = ucbValues[index]
-            if (newValue > ucbValues[maxIndex]) {
+            val currentValue = ucbValues[index]
+            if (currentValue > ucbValues[maxIndex]) {
                 maxIndex = index
             }
         }

@@ -1,4 +1,4 @@
-package com.funcorp.springbootcontent.loadtests
+package com.funcorp.bandit.loadtests
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test

@@ -1,7 +1,7 @@
-package com.funcorp.springbootcontent.content.service
+package com.funcorp.bandit.content.service
 
-import com.funcorp.springbootcontent.content.model.Content
-import com.funcorp.springbootcontent.content.repository.IContentRepository
+import com.funcorp.bandit.content.model.Content
+import com.funcorp.bandit.content.repository.IContentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
