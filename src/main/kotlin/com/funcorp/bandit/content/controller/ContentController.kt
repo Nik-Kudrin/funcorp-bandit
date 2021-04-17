@@ -38,15 +38,13 @@ class ContentController {
         @RequestParam("userId") userId: String,
         @RequestParam("watchedOn") watchedOn: String
     ): ResponseEntity<String> {
-        val contentOptional = contentService.getById(id)
+        val optional = contentService.addView(id, userId, watchedOn)
 
-        if (!contentOptional.isPresent)
+        if (!optional.isPresent)
             return ResponseEntity("Content with id $id doesn't exist", HttpStatus.NO_CONTENT)
 
-        // TODO
-
-        log.debug("View has been added to content: ${contentOptional.get().id} for user $userId")
-        return ResponseEntity(HttpStatus.CREATED)
+        log.debug("View has been added to content: $id for user $userId")
+        return ResponseEntity(HttpStatus.OK)
     }
 
     @Transactional

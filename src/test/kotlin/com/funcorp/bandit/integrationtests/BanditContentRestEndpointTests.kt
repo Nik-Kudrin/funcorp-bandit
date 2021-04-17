@@ -93,7 +93,24 @@ class BanditContentRestEndpointTests {
         val storedContent = getContentViaHttp(expectedContent.id)
 
         expectedContent.likes.putIfAbsent(userId, like)
+        storedContent.shouldBe(expectedContent)
+    }
 
+    @Test
+    fun viewShouldBeStoredInDb() {
+        val expectedContent = addContentViaHttp()
+        val userId = UUID.randomUUID().toString()
+        val view = ContentEvent(userId, EventType.View, Instant.now().epochSecond.toString())
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("$CONTENT_ROUTE/${expectedContent.id}/views/add")
+                .queryParam("userId", userId)
+                .queryParam("watchedOn", view.eventTime.toInstant().epochSecond.toString())
+        ).andExpect(MockMvcResultMatchers.status().isOk)
+
+        val storedContent = getContentViaHttp(expectedContent.id)
+
+        expectedContent.views.putIfAbsent(userId, view)
         storedContent.shouldBe(expectedContent)
     }
 }

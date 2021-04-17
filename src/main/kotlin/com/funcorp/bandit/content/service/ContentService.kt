@@ -31,13 +31,25 @@ class ContentService : IContentService {
     }
 
     @Transactional
-    fun addLike(contentId: String, userId: String, watchedOn: String): Optional<Content> {
+    fun addLike(contentId: String, userId: String, likedOn: String): Optional<Content> {
         val optional = contentRepository.findById(contentId)
 
         if (optional.isEmpty) return Optional.empty()
 
         val content = optional.get()
-        content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.Like, watchedOn))
+        content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.Like, likedOn))
+
+        return Optional.of(contentRepository.save(content))
+    }
+
+    @Transactional
+    fun addView(contentId: String, userId: String, watchedOn: String): Optional<Content> {
+        val optional = contentRepository.findById(contentId)
+
+        if (optional.isEmpty) return Optional.empty()
+
+        val content = optional.get()
+        content.views.putIfAbsent(userId, ContentEvent(userId, EventType.View, watchedOn))
 
         return Optional.of(contentRepository.save(content))
     }
