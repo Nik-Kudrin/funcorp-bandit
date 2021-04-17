@@ -1,8 +1,11 @@
-Spring Boot REST service, that provides content to user by sorting it via UCB1 algorithm.
+REST service, that provides content to user by sorting it via UCB1 algorithm. (Multi-Armed Bandit algorithm)  
+Spring Boot, Kotlin
 
 Assumptions and restrictions ...
 
 #### Environment preparation
+
+TODO: wrap it into docker compose ?
 
 Start a PostgreSQL instance:
 
@@ -20,5 +23,7 @@ docker run -d \
 
 #### TODO
 
-- be able to register events not only via REST, but via other messaging system (Kafka).
+- be able to register events not only via REST, but via other messaging system (Kafka) ?
+- unit test for algorithm (verify probability distribution)
+- performance test for entire service
 
