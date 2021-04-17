@@ -1,6 +1,6 @@
 package com.funcorp.springbootcontent
 
-import com.funcorp.springbootcontent.content.repository.ContentRepository
+import com.funcorp.springbootcontent.content.repository.IContentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -13,7 +13,7 @@ import org.springframework.context.event.EventListener
 @SpringBootApplication
 class ContentApplication {
     @Autowired
-    private lateinit var contentRepository: ContentRepository
+    private lateinit var contentRepository: IContentRepository
 
     @EventListener(ApplicationReadyEvent::class)
     fun runAfterStartup() {

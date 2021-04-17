@@ -15,7 +15,10 @@ data class Content(
     val id: String = "",
 
     @Column(name = "creation_time", nullable = false)
-    val creationTime: Timestamp = Timestamp(0)
+    val creationTime: Timestamp = Timestamp(0),
+
+    @Column(name = "is_active", nullable = false)
+    val isActive: Boolean = true
 ) {
     constructor(id: String, creationTime: String) : this(
         id,
