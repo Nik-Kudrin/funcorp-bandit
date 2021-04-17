@@ -33,26 +33,36 @@ class ContentController {
 
     @Transactional
     @PostMapping(value = ["/{id}/views/add"])
-    fun addView(@PathVariable("id") id: String, @RequestParam("watchedOn") timestamp: String): ResponseEntity<String> {
-        val content = Content(id, timestamp)
+    fun addView(
+        @PathVariable("id") id: String,
+        @RequestParam("userId") userId: String,
+        @RequestParam("watchedOn") watchedOn: String
+    ): ResponseEntity<String> {
+        val contentOptional = contentService.getById(id)
 
-        if (!contentService.insert(content))
-            return ResponseEntity("Content with id $id already exist", HttpStatus.CONFLICT)
+        if (!contentOptional.isPresent)
+            return ResponseEntity("Content with id $id doesn't exist", HttpStatus.NO_CONTENT)
 
-        log.debug("Content has been added: $content")
+        // TODO
+
+        log.debug("View has been added to content: ${contentOptional.get().id} for user $userId")
         return ResponseEntity(HttpStatus.CREATED)
     }
 
     @Transactional
     @PostMapping(value = ["/{id}/likes/add"])
-    fun addLike(@PathVariable("id") id: String, @RequestParam("likedOn") timestamp: String): ResponseEntity<String> {
-        val content = Content(id, timestamp)
+    fun addLike(
+        @PathVariable("id") id: String,
+        @RequestParam("userId") userId: String,
+        @RequestParam("likedOn") likedOn: String
+    ): ResponseEntity<String> {
+        val optional = contentService.addLike(id, userId, likedOn)
 
-        if (!contentService.insert(content))
-            return ResponseEntity("Content with id $id already exist", HttpStatus.CONFLICT)
+        if (!optional.isPresent)
+            return ResponseEntity("Content with id $id doesn't exit", HttpStatus.NO_CONTENT)
 
-        log.debug("Content has been added: $content")
-        return ResponseEntity(HttpStatus.CREATED)
+        log.debug("Like has been added to content: $id for user $userId")
+        return ResponseEntity(HttpStatus.OK)
     }
 
     @GetMapping(value = ["/{id}"])

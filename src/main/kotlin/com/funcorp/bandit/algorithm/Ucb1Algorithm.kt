@@ -11,15 +11,15 @@ import kotlin.math.sqrt
  */
 class Ucb1Algorithm(totalItemsNumber: Int) : BanditAlgorithm(totalItemsNumber) {
 
-    override fun selectItem(): Int {
+    override fun selectTopItems(count: Int): Int {
         var totalCount = 0
 
         for (index in attempts.indices) {
-            val count = attempts[index]
-            if (count == 0) {
+            val attemptsCount = attempts[index]
+            if (attemptsCount == 0) {
                 return index
             }
-            totalCount += count
+            totalCount += attemptsCount
         }
 
         val ucbValues = DoubleArray(totalItemsNumber)

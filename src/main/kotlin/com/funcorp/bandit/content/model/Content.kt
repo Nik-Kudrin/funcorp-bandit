@@ -1,5 +1,6 @@
 package com.funcorp.bandit.content.model
 
+import com.funcorp.bandit.extensions.toDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
@@ -12,22 +13,16 @@ data class Content(
     // TODO: Zoned Date Time ?
     val createdOn: Date = Date(),
 
-    val events: MutableList<ContentEvent> = mutableListOf()
+    val views: MutableMap<String, ContentEvent> = mutableMapOf<String, ContentEvent>(),
+    val likes: MutableMap<String, ContentEvent> = mutableMapOf<String, ContentEvent>()
 ) {
     /**
-     * [createdOn] - unix time (epoch seconds)
+     * [createdOn] - Unix time (epoch seconds)
      */
-    constructor(id: String, createdOn: String) : this(
-        id,
-        createdOn.toLong()
-    )
+    constructor(id: String, createdOn: String) : this(id, createdOn.toDate())
 
     /**
-     * [createdOn] - unix time (epoch seconds)
+     * [createdOn] - Unix time (epoch seconds)
      */
-    constructor(id: String, createdOn: Long) : this(
-        id,
-        // to milliseconds
-        Date(createdOn * 1000)
-    )
+    constructor(id: String, createdOn: Long) : this(id, createdOn.toDate())
 }

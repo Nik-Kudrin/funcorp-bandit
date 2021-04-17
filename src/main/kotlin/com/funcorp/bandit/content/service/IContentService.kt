@@ -8,5 +8,10 @@ internal interface IContentService {
     @Transactional
     fun insert(content: Content): Boolean
 
+    @Transactional
+    fun save(content: Content): Optional<Content>
+
     fun getById(id: String): Optional<Content>
+
+    fun getAll(): List<Content>
 }

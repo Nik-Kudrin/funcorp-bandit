@@ -10,12 +10,12 @@ import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class LoadTestContent {
+class BanditLoadTest {
     @Autowired
     private lateinit var restTemplate: TestRestTemplate
 
     companion object {
-        private val log = LoggerFactory.getLogger(LoadTestContent::class.java)
+        private val log = LoggerFactory.getLogger(BanditLoadTest::class.java)
     }
 
     @Test

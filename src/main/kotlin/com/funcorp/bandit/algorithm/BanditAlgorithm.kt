@@ -16,17 +16,10 @@ abstract class BanditAlgorithm {
         scores = DoubleArray(totalItemsNumber)
     }
 
-    abstract fun selectItem(): Int
+    abstract fun selectTopItems(count: Int = 1): Int
 
     open fun update(itemIndex: Int, reward: Double) {
         attempts[itemIndex]++
         scores[itemIndex] = updateStrategy.update(attempts[itemIndex], scores[itemIndex], reward)
     }
-
-//    open fun reset() {
-//        for (i in counts.indices) {
-//            counts[i] = 0
-//            values[i] = 0.0
-//        }
-//    }
 }

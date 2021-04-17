@@ -10,7 +10,7 @@ import org.springframework.context.event.EventListener
 
 @EnableAutoConfiguration
 @SpringBootApplication
-class ContentApplication {
+class BanditApplication {
     @Autowired
     private lateinit var contentRepository: IContentRepository
 
@@ -25,6 +25,6 @@ class ContentApplication {
 }
 
 fun main(args: Array<String>) {
-    runApplication<ContentApplication>(*args)
+    runApplication<BanditApplication>(*args)
 }
 
