@@ -34,8 +34,6 @@ class ContentApplicationTests {
         val result = mockMvc.perform(
             MockMvcRequestBuilders.post("/content/add")
                 .queryParam("id", "13")
-                // yyyy-mm-dd hh:mm:ss
-//                .queryParam("timestamp", "2020-10-12 03:40:23")
                 .queryParam("timestamp", Instant.now().epochSecond.toString())
         )
             .andDo(MockMvcResultHandlers.print())

@@ -26,6 +26,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("io.kotest:kotest-assertions-core-jvm:4.3.0")
+    implementation("io.kotest:kotest-property-jvm:4.3.0")
+
+    implementation("com.github.javafaker:javafaker:1.0.2")
 }
 
 tasks.withType<KotlinCompile> {
