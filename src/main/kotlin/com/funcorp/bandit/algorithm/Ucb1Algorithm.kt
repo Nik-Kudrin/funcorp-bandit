@@ -9,15 +9,13 @@ import kotlin.math.sqrt
  * https://medium.com/analytics-vidhya/multi-armed-bandit-analysis-of-upper-confidence-bound-algorithm-4b84be516047
  * https://jeremykun.com/2013/10/28/optimism-in-the-face-of-uncertainty-the-ucb1-algorithm/
  */
-class Ucb1Algorithm : BanditAlgorithm {
-
-    constructor(totalItemsNumber: Int) : super(totalItemsNumber)
+class Ucb1Algorithm(totalItemsNumber: Int) : BanditAlgorithm(totalItemsNumber) {
 
     override fun selectOption(): Int {
         var totalCount = 0
 
-        for (index in counts.indices) {
-            val count = counts[index]
+        for (index in attempts.indices) {
+            val count = attempts[index]
             if (count == 0) {
                 return index
             }
@@ -27,8 +25,8 @@ class Ucb1Algorithm : BanditAlgorithm {
         val ucbValues = DoubleArray(totalItemsNumber)
 
         for (index in 0 until totalItemsNumber) {
-            val bonus = sqrt(2 * ln(totalCount.toDouble()) / counts[index])
-            ucbValues[index] = values[index] + bonus
+            val bonus = sqrt(2 * ln(totalCount.toDouble()) / attempts[index])
+            ucbValues[index] = scores[index] + bonus
         }
 
         var maxIndex = 0
