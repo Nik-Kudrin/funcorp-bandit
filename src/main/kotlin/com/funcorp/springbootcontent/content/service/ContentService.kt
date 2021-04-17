@@ -13,7 +13,7 @@ class ContentService : IContentService {
     override fun insert(content: Content): Boolean {
         return if (contentRepository.findById(content.id).isPresent) false
         else {
-            contentRepository.saveAndFlush(content)
+            contentRepository.save(content)
             true
         }
     }

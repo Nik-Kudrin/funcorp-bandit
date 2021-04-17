@@ -1,5 +1,7 @@
 package com.funcorp.springbootcontent.integrationtests
 
+import com.funcorp.springbootcontent.content.model.Content
+import com.github.javafaker.Faker
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,12 +12,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class ContentApplicationTests {
     @Autowired
     private lateinit var mockMvc: MockMvc
+
+    private val faker = Faker.instance(Locale("RU"))
 
     companion object {
         private val log = LoggerFactory.getLogger(ContentApplicationTests::class.java)
@@ -31,21 +37,31 @@ class ContentApplicationTests {
 
     @Test
     fun content_Add() {
-        val result = mockMvc.perform(
+        val content = Content(
+            id = UUID.randomUUID().toString(),
+            createdOn = Instant.now().minus(faker.random().nextLong(20), ChronoUnit.MINUTES).epochSecond
+        )
+
+        var result = mockMvc.perform(
             MockMvcRequestBuilders.post("/content/add")
-                .queryParam("id", "13")
-                .queryParam("timestamp", Instant.now().epochSecond.toString())
+                .queryParam("id", content.id)
+                .queryParam(
+                    "timestamp", content.createdOn.toInstant().epochSecond.toString()
+                )
         )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isCreated)
-        log.info(result.toString())
+
+        result = mockMvc.perform(MockMvcRequestBuilders.get("/content/${content.id}"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+
+        // TODO: check deserialization of Content
+//        log.info(result.andReturn().response.getContentAsString())
     }
 
     @Test
     fun content_Get() {
-        val result = mockMvc.perform(MockMvcRequestBuilders.get("/content/13"))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().isOk)
-        log.info(result.toString())
+
     }
 }

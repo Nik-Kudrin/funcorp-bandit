@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @RestController
 @RequestMapping("/content")
@@ -22,7 +21,6 @@ class ContentController {
 
     @Transactional
     @PostMapping(value = ["/add"])
-    @ResponseStatus(HttpStatus.CREATED)
     fun add(@RequestParam("id") id: String, @RequestParam("timestamp") timestamp: String): ResponseEntity<String> {
         val content = Content(id, timestamp)
 
@@ -34,7 +32,12 @@ class ContentController {
     }
 
     @GetMapping(value = ["/{id}"])
-    fun get(@PathVariable("id") id: String): Optional<Content> {
-        return contentService.getById(id)
+    fun get(@PathVariable("id") id: String): ResponseEntity<Content> {
+        val content = contentService.getById(id)
+
+        return when (content.isPresent) {
+            true -> ResponseEntity(content.get(), HttpStatus.OK)
+            else -> ResponseEntity(HttpStatus.NO_CONTENT)
+        }
     }
 }

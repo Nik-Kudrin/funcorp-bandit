@@ -1,32 +1,29 @@
 REST service, that provides content to user by sorting it via UCB1 algorithm. (Multi-Armed Bandit algorithm)  
 Spring Boot, Kotlin
 
-Assumptions and restrictions ...
+*TODO:* Assumptions and restrictions ...
 
 #### Environment preparation
 
 TODO: wrap it into docker compose ?
 
-1) Start a PostgreSQL instance:
+1) Run MongoDB
 
 ```
-docker run -d \
-    --name postgres-content \
-    -e POSTGRES_USER=ADMIN \
-    -e POSTGRES_PASSWORD=SECRET \
-    -e PGDATA=/var/lib/postgresql/data/pgdata \
-    -v /opt/postgresql_volume/:/var/lib/postgresql/data \
-    -p 5432:5432 \
-    postgres:13.2
-```
+docker run --rm --name mongo-server -p 27017-27019:27017-27019 -v /opt/mongodb_volume:/data/db -d mongo
+```  
+
+where `/opt/mongodb_volume` - your local data volume for mongo
 
 2) Run service
    ```./gradlew clean bootRun```
 
 3) Endpoints
-    - ``/play/{userId}``
-    - ...
-    - ...
+   - Get list of content, using UCB1 `/play/{userId}`
+   - Add new content `/content/add?id={id}&timestam={unix_timestamp}`
+   - Get content info `/content/{id}`
+   - Add view to content `/content/{id}/add/view?userId={userId}`
+   - Add like to content `/content/{id}/add/like?userId={userId}`
 
 #### TODO
 

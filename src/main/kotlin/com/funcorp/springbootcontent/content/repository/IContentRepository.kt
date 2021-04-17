@@ -1,6 +1,6 @@
 package com.funcorp.springbootcontent.content.repository
 
 import com.funcorp.springbootcontent.content.model.Content
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.mongodb.repository.MongoRepository
 
-interface IContentRepository : JpaRepository<Content, String>
+interface IContentRepository : MongoRepository<Content, String>
