@@ -17,6 +17,6 @@ class PlayController {
         //ContentId, отсортированный по алгоритму UCB1. Если контента не хватает, то вернуть
         //сколько есть.
 
-        return Ucb1Algorithm(totalItemsNumber = 100).selectOption()
+        return Ucb1Algorithm(totalItemsNumber = 100).selectItem()
     }
 }

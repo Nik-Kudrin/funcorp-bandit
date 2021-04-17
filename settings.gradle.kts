@@ -1,1 +1,1 @@
-rootProject.name = "spring-boot-content"
+rootProject.name = "funcorp-bandit"

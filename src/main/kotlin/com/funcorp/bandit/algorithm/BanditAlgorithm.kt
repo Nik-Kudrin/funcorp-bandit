@@ -16,7 +16,7 @@ abstract class BanditAlgorithm {
         scores = DoubleArray(totalItemsNumber)
     }
 
-    abstract fun selectOption(): Int
+    abstract fun selectItem(): Int
 
     open fun update(itemIndex: Int, reward: Double) {
         attempts[itemIndex]++

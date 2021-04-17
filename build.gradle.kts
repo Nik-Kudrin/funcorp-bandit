@@ -20,7 +20,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:2.4.5")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.4.5")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
-    implementation("org.postgresql:postgresql:42.2.19")
+    implementation("com.fasterxml.jackson.module:jackson-module-parameter-names")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

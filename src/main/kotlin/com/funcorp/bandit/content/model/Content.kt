@@ -10,7 +10,9 @@ data class Content(
     val id: String = "",
 
     // TODO: Zoned Date Time ?
-    val createdOn: Date = Date()
+    val createdOn: Date = Date(),
+
+    val events: MutableList<ContentEvent> = mutableListOf()
 ) {
     /**
      * [createdOn] - unix time (epoch seconds)

@@ -11,7 +11,7 @@ import kotlin.math.sqrt
  */
 class Ucb1Algorithm(totalItemsNumber: Int) : BanditAlgorithm(totalItemsNumber) {
 
-    override fun selectOption(): Int {
+    override fun selectItem(): Int {
         var totalCount = 0
 
         for (index in attempts.indices) {

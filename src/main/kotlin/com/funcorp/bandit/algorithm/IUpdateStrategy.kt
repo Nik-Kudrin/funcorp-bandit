@@ -1,5 +1,5 @@
 package com.funcorp.bandit.algorithm
 
 interface IUpdateStrategy {
-    fun update(numberOptionsToChoose: Int, value: Double, reward: Double): Double
+    fun update(attempts: Int, score: Double, reward: Double): Double
 }

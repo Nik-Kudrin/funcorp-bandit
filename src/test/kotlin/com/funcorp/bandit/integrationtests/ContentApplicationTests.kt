@@ -1,7 +1,9 @@
 package com.funcorp.bandit.integrationtests
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.funcorp.bandit.content.model.Content
 import com.github.javafaker.Faker
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +17,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class ContentApplicationTests {
@@ -22,6 +25,7 @@ class ContentApplicationTests {
     private lateinit var mockMvc: MockMvc
 
     private val faker = Faker.instance(Locale("RU"))
+    private val mapper = ObjectMapper()
 
     companion object {
         private val log = LoggerFactory.getLogger(ContentApplicationTests::class.java)
@@ -36,32 +40,26 @@ class ContentApplicationTests {
     }
 
     @Test
-    fun content_Add() {
-        val content = Content(
+    fun contentStoredInDbSuccessfully() {
+        val expectedContent = Content(
             id = UUID.randomUUID().toString(),
             createdOn = Instant.now().minus(faker.random().nextLong(20), ChronoUnit.MINUTES).epochSecond
         )
 
-        var result = mockMvc.perform(
+        mockMvc.perform(
             MockMvcRequestBuilders.post("/content/add")
-                .queryParam("id", content.id)
-                .queryParam(
-                    "timestamp", content.createdOn.toInstant().epochSecond.toString()
-                )
-        )
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().isCreated)
+                .queryParam("id", expectedContent.id)
+                .queryParam("timestamp", expectedContent.createdOn.toInstant().epochSecond.toString())
+        ).andExpect(MockMvcResultMatchers.status().isCreated)
 
-        result = mockMvc.perform(MockMvcRequestBuilders.get("/content/${content.id}"))
-            .andDo(MockMvcResultHandlers.print())
+        val response = mockMvc.perform(MockMvcRequestBuilders.get("/content/${expectedContent.id}"))
             .andExpect(MockMvcResultMatchers.status().isOk)
 
-        // TODO: check deserialization of Content
-//        log.info(result.andReturn().response.getContentAsString())
-    }
+        val storedContent = mapper.readValue(
+            response.andReturn().response.contentAsString,
+            Content::class.java
+        )
 
-    @Test
-    fun content_Get() {
-
+        storedContent.shouldBe(expectedContent)
     }
 }
