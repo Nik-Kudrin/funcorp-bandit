@@ -23,7 +23,7 @@ internal fun MockMvc.addContentViaHttp(): Content {
             .queryParam("timestamp", expectedContent.createdOn.toInstant().epochSecond.toString())
     ).andExpect(MockMvcResultMatchers.status().isCreated)
 
-    log.debug("Request executed for adding content ${expectedContent.id}")
+    log.info("Request executed for adding content ${expectedContent.id}")
 
     return expectedContent
 }
@@ -40,7 +40,7 @@ internal fun MockMvc.addLikeToContentViaHttp(
             .queryParam("likedOn", like.eventTime.toInstant().epochSecond.toString())
     ).andExpect(MockMvcResultMatchers.status().isOk)
 
-    log.debug("Request executed to add like to content $contentId")
+    log.info("Request executed to add like to content $contentId")
 
     return Pair(userId, like)
 }
@@ -57,7 +57,7 @@ internal fun MockMvc.addViewToContentViaHttp(
             .queryParam("watchedOn", view.eventTime.toInstant().epochSecond.toString())
     ).andExpect(MockMvcResultMatchers.status().isOk)
 
-    log.debug("Request executed to add view to content $contentId")
+    log.info("Request executed to add view to content $contentId")
 
     return Pair(userId, view)
 }
@@ -66,7 +66,7 @@ internal fun MockMvc.getContentViaHttp(contentId: String): Content {
     val response = this.perform(MockMvcRequestBuilders.get("$CONTENT_ROUTE/$contentId"))
         .andExpect(MockMvcResultMatchers.status().isOk)
 
-    log.debug("Request executed to get content $contentId")
+    log.info("Request executed to get content $contentId")
 
     return response.deserializeResponse<Content>()
 }

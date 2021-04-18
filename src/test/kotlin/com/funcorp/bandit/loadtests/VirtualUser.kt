@@ -20,8 +20,8 @@ class VirtualUser(private val mockMvc: MockMvc) {
     }
 
     fun getSuggestedContent(): List<String> {
-        val resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/play/${UUID.randomUUID()}"))
-        log.debug("Request executed on /play endpoint")
+        val resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/play/$userId"))
+        log.info("Request executed on /play endpoint by user $userId")
 
         return resultActions.deserializeResponse<List<String>>()
     }
