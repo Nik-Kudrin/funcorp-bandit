@@ -39,7 +39,7 @@ class BanditLoadTest {
         val startTime = System.currentTimeMillis().toDuration(TimeUnit.MILLISECONDS)
 
         do {
-            scope.launch { VirtualUser(mockMvc).act() }
+            scope.launch { LoadTestEnvironment.users.random().act() }
             runBlocking { delay(50.milliseconds) }
         } while (System.currentTimeMillis().toDuration(TimeUnit.MILLISECONDS) < startTime + loadRunDuration)
     }
