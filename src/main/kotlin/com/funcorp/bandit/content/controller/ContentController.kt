@@ -72,4 +72,10 @@ class ContentController {
             else -> ResponseEntity(HttpStatus.NO_CONTENT)
         }
     }
+
+    // TODO: pagination
+    @GetMapping(value = ["/all"], produces = ["application/json"])
+    fun getAllContent(): List<Content> {
+        return contentService.getAll().sortedByDescending { it.statisticalScore }
+    }
 }

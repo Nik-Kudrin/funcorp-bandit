@@ -21,7 +21,7 @@ class StatisticsController {
 
     @Transactional // TODO: potential bottleneck ?
     @GetMapping(value = ["/{userId}"], produces = ["application/json"])
-    fun play(@PathVariable("userId") id: Long): List<String> {
+    fun play(@PathVariable("userId") id: String): List<String> {
         // TODO У сервиса есть HTTP ручка /play/{UserId}, по которой он должен вернуть список из 10
         //ContentId, отсортированный по алгоритму UCB1. Если контента не хватает, то вернуть
         //сколько есть.

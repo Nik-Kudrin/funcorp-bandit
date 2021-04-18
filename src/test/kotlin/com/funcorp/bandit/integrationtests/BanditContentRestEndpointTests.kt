@@ -83,8 +83,8 @@ class BanditContentRestEndpointTests {
     }
 
     @Test
-    fun play_GetContentShouldReturn() {
-        val content = (0 until 20).map { addContentViaHttp() }
+    fun play_GetContentShouldReturnMostPromisingItems() {
+        val content = (0 until 30).map { addContentViaHttp() }
 
         // view all content
         content.forEach { addViewToContentViaHttp(it.id) }
