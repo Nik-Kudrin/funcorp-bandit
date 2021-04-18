@@ -1,7 +1,7 @@
 REST service, that gives content sorted by UCB1 algorithm. (Multi-Armed Bandit algorithm)  
 Spring Boot, Kotlin
 
-Task description [FunCorp_Task.pdf]()
+Task description [here](FunCorp_Task.pdf)
 
 #### Environment preparation
 
@@ -24,5 +24,4 @@ where `/opt/mongodb_volume` - your local data volume for mongo
 
 #### Tests
 
-- Performance test [src/test/kotlin/com/funcorp/bandit/loadtests/BanditLoadTest.kt]()
-
+- Performance test [here](src/test/kotlin/com/funcorp/bandit/loadtests/BanditLoadTest.kt)
