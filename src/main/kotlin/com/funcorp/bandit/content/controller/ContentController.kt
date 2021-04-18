@@ -73,7 +73,7 @@ class ContentController {
         }
     }
 
-    // TODO: pagination
+    // TODO: add paging
     @GetMapping(value = ["/all"], produces = ["application/json"])
     fun getAllContent(): List<Content> {
         return contentService.getAll().sortedByDescending { it.statisticalScore }
