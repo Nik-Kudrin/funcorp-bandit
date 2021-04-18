@@ -66,4 +66,6 @@ class ContentService : IContentService {
     override fun getById(id: String) = contentRepository.findById(id)
 
     override fun getAll(): List<Content> = contentRepository.findAll()
+
+    fun delete(content: Iterable<Content>) = contentRepository.deleteAll(content)
 }
