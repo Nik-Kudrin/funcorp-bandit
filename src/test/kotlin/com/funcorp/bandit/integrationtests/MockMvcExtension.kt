@@ -4,11 +4,15 @@ import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
 import com.funcorp.bandit.generators.ContentGenerator
+import com.funcorp.bandit.loadtests.BanditLoadTest
+import org.slf4j.LoggerFactory
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.Instant
 import java.util.*
+
+private val log = LoggerFactory.getLogger(BanditLoadTest::class.java)
 
 internal fun MockMvc.addContentViaHttp(): Content {
     val expectedContent = ContentGenerator.generateValidContent()
@@ -18,6 +22,8 @@ internal fun MockMvc.addContentViaHttp(): Content {
             .queryParam("id", expectedContent.id)
             .queryParam("timestamp", expectedContent.createdOn.toInstant().epochSecond.toString())
     ).andExpect(MockMvcResultMatchers.status().isCreated)
+
+    log.debug("Request executed for adding content ${expectedContent.id}")
 
     return expectedContent
 }
@@ -34,6 +40,8 @@ internal fun MockMvc.addLikeToContentViaHttp(
             .queryParam("likedOn", like.eventTime.toInstant().epochSecond.toString())
     ).andExpect(MockMvcResultMatchers.status().isOk)
 
+    log.debug("Request executed to add like to content $contentId")
+
     return Pair(userId, like)
 }
 
@@ -49,12 +57,16 @@ internal fun MockMvc.addViewToContentViaHttp(
             .queryParam("watchedOn", view.eventTime.toInstant().epochSecond.toString())
     ).andExpect(MockMvcResultMatchers.status().isOk)
 
+    log.debug("Request executed to add view to content $contentId")
+
     return Pair(userId, view)
 }
 
 internal fun MockMvc.getContentViaHttp(contentId: String): Content {
     val response = this.perform(MockMvcRequestBuilders.get("$CONTENT_ROUTE/$contentId"))
         .andExpect(MockMvcResultMatchers.status().isOk)
+
+    log.debug("Request executed to get content $contentId")
 
     return response.deserializeResponse<Content>()
 }

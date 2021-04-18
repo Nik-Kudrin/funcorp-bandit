@@ -8,7 +8,7 @@ import kotlin.random.Random
 
 class LoadTestEnvironment {
     companion object {
-        private val log = LoggerFactory.getLogger(BanditLoadTest::class.java)
+        private val log = LoggerFactory.getLogger(LoadTestEnvironment::class.java)
 
         lateinit var users: List<VirtualUser>
         lateinit var content: Map<String, Pair<Content, Double>>
