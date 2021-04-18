@@ -16,7 +16,7 @@ import kotlin.time.toDuration
 @AutoConfigureMockMvc
 @SpringBootTest
 class BanditLoadTest {
-    // TODO: migrate to TestRestTemplate
+    // TODO: migrate to TestResBanditLoadTesttTemplate
     @Autowired
     private lateinit var mockMvc: MockMvc
 
