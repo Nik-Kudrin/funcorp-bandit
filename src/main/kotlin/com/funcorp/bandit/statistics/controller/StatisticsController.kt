@@ -21,18 +21,21 @@ class StatisticsController {
 
     @Transactional // TODO: potential bottleneck ?
     @GetMapping(value = ["/{userId}"], produces = ["application/json"])
-    fun play(@PathVariable("userId") id: String): List<String> {
-        // TODO У сервиса есть HTTP ручка /play/{UserId}, по которой он должен вернуть список из 10
-        //ContentId, отсортированный по алгоритму UCB1. Если контента не хватает, то вернуть
-        //сколько есть.
-
-
-        val contentItems = contentService.getAll()
+    fun play(@PathVariable("userId") userId: String): List<String> {
+        // TODO: use MongoTemplate and DynamicQuery to filter unnecessary content on DB side
+        val contentItems = contentService.getAll().filter { !it.views.containsKey(userId) }
 
         val promisingItems = ucb1Algorithm.selectMostPromisingItems(contentItems, itemsCount = 10)
-        // TODO: В течении 5 минут после отдачи списка контента, если событий просмотра не было,
-        // считается, что этот пользователь этот контент просмотрел
-        // TODO: create db scheduler ?
+
+        // During 5 minutes after content was given to user it counts as viewed
+        // After 5 minutes those "fake" views will be deleted
+        promisingItems.forEach {
+            contentService.apply {
+                addView(contentId = it, userId = userId, watchedOn = "")
+                fakeViewActualizator(contentId = it, userId = userId)
+            }
+        }
+
         return promisingItems
     }
 }

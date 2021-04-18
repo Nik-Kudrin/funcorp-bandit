@@ -6,15 +6,19 @@ import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
 import com.funcorp.bandit.content.repository.IContentRepository
+import kotlinx.coroutines.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import kotlin.time.minutes
 
 @Service
 class ContentService : IContentService {
     @Autowired
     private lateinit var contentRepository: IContentRepository
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     companion object {
         private val updateStrategy: ICalculateScoreStrategy = AverageUpdateStrategy()
@@ -51,16 +55,50 @@ class ContentService : IContentService {
     }
 
     @Transactional
-    fun addView(contentId: String, userId: String, watchedOn: String): Optional<Content> {
+    fun addView(contentId: String, userId: String, watchedOn: String = ""): Optional<Content> {
         val optional = contentRepository.findById(contentId)
 
         if (optional.isEmpty) return Optional.empty()
 
         val content = optional.get()
         content.attempts++
-        content.views.putIfAbsent(userId, ContentEvent(userId, EventType.View, watchedOn))
+
+        // "fake" view for user, when it just got content (this view will be outdated after some time)
+        val view: ContentEvent = if (watchedOn.isBlank())
+            ContentEvent(userId, EventType.View, null)
+        else
+            ContentEvent(userId, EventType.View, watchedOn)
+
+        content.views[userId] = view
 
         return Optional.of(contentRepository.save(content))
+    }
+
+    @Transactional
+    fun deleteFakeView(contentId: String, userId: String) {
+        val optional = contentRepository.findById(contentId)
+
+        if (optional.isEmpty) return
+
+        val content = optional.get()
+        content.attempts--
+        contentRepository.save(content)
+    }
+
+    /**
+     * After 5 minutes "fake" views will be deleted
+     */
+    fun fakeViewActualizator(contentId: String, userId: String) {
+        scope.launch {
+            delay(5.minutes)
+            val optional = getById(contentId)
+
+            if (optional.isPresent) {
+                val view = optional.get().views[userId]
+                if (view != null && view.eventTime == null)
+                    deleteFakeView(contentId, userId)
+            }
+        }
     }
 
     override fun getById(id: String) = contentRepository.findById(id)

@@ -52,7 +52,7 @@ class BanditContentRestEndpointTests {
         mockMvc.perform(
             MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/likes/add")
                 .queryParam("userId", userId)
-                .queryParam("likedOn", like.eventTime.toInstant().epochSecond.toString())
+                .queryParam("likedOn", like.eventTime!!.toInstant().epochSecond.toString())
         ).andExpect(MockMvcResultMatchers.status().isOk)
 
         return Pair(userId, like)
@@ -65,7 +65,7 @@ class BanditContentRestEndpointTests {
         mockMvc.perform(
             MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/views/add")
                 .queryParam("userId", userId)
-                .queryParam("watchedOn", view.eventTime.toInstant().epochSecond.toString())
+                .queryParam("watchedOn", view.eventTime!!.toInstant().epochSecond.toString())
         ).andExpect(MockMvcResultMatchers.status().isOk)
 
         return Pair(userId, view)

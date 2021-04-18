@@ -14,7 +14,14 @@ data class Content(
     // TODO: ZonedDateTime ?
     val createdOn: Date = Date(),
 
+    /**
+     * UserId / ContentEvent
+     */
     val views: MutableMap<String, ContentEvent> = mutableMapOf<String, ContentEvent>(),
+
+    /**
+     * UserId / ContentEvent
+     */
     val likes: MutableMap<String, ContentEvent> = mutableMapOf<String, ContentEvent>(),
 
     override var attempts: Long = 0L,

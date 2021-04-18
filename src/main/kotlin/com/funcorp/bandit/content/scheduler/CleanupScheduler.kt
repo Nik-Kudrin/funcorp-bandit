@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 
@@ -24,14 +23,14 @@ class CleanupScheduler {
 
     // every 2 minutes
     @Scheduled(fixedRate = 2 * 60 * 1000)
-    @ExperimentalTime
     @Transactional
     fun deleteOutOfDateContent() {
         log.info("Cleanup out of date content is starting ...")
 
         val duration = measureTime {
             val oldestTimeBoundary = Date.from(Instant.now().minus(30, ChronoUnit.MINUTES))
-            // TODO: use custom MongoTemplate and DynamicQuery to filter unnecessary content on DB side
+
+            // TODO: use MongoTemplate and DynamicQuery to filter unnecessary content on DB side
             val contentToDelete = contentService.getAll()
                 .filter { it.createdOn.before(oldestTimeBoundary) }
 

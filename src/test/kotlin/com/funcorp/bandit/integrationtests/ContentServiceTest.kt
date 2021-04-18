@@ -39,7 +39,7 @@ class ContentServiceTest {
 
         contentService.let {
             it.insert(expectedContent)
-            it.addView(expectedContent.id, userId, watchedOn = view.eventTime.toInstant().epochSecond.toString())
+            it.addView(expectedContent.id, userId, watchedOn = view.eventTime!!.toInstant().epochSecond.toString())
         }
             .get()
             .shouldBe(expectedContent.apply {
@@ -56,7 +56,7 @@ class ContentServiceTest {
 
         contentService.let {
             it.insert(expectedContent)
-            it.addLike(expectedContent.id, userId, likedOn = like.eventTime.toInstant().epochSecond.toString())
+            it.addLike(expectedContent.id, userId, likedOn = like.eventTime!!.toInstant().epochSecond.toString())
         }
             .get()
             .shouldBe(expectedContent.apply { likes.putIfAbsent(userId, like) })

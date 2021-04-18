@@ -22,7 +22,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
     implementation("com.fasterxml.jackson.module:jackson-module-parameter-names")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
-
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.4.3")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
@@ -38,7 +39,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.time.ExperimentalTime")
         jvmTarget = "11"
     }
 }
