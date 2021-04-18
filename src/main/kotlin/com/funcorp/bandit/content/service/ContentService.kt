@@ -1,5 +1,7 @@
 package com.funcorp.bandit.content.service
 
+import com.funcorp.bandit.algorithm.AverageUpdateStrategy
+import com.funcorp.bandit.algorithm.ICalculateScoreStrategy
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
@@ -13,6 +15,10 @@ import java.util.*
 class ContentService : IContentService {
     @Autowired
     private lateinit var contentRepository: IContentRepository
+
+    companion object {
+        protected var updateStrategy: ICalculateScoreStrategy = AverageUpdateStrategy()
+    }
 
     @Transactional
     override fun insert(content: Content): Boolean {
@@ -37,6 +43,8 @@ class ContentService : IContentService {
         if (optional.isEmpty) return Optional.empty()
 
         val content = optional.get()
+        // Recalculate score
+        content.statisticalScore = updateStrategy.calculateScore(content.attempts, content.statisticalScore, 1.0)
         content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.Like, likedOn))
 
         return Optional.of(contentRepository.save(content))
@@ -49,6 +57,7 @@ class ContentService : IContentService {
         if (optional.isEmpty) return Optional.empty()
 
         val content = optional.get()
+        content.attempts++
         content.views.putIfAbsent(userId, ContentEvent(userId, EventType.View, watchedOn))
 
         return Optional.of(contentRepository.save(content))

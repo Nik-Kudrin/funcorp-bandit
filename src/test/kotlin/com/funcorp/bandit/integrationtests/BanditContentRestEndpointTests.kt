@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
-import com.github.javafaker.Faker
+import com.funcorp.bandit.generators.ContentGenerator
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.Instant
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -27,7 +26,7 @@ class BanditContentRestEndpointTests {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
-    private val faker = Faker.instance(Locale("RU"))
+
     private val mapper = ObjectMapper()
     private final val CONTENT_ROUTE = "/content"
 
@@ -36,10 +35,7 @@ class BanditContentRestEndpointTests {
     }
 
     private fun addContentViaHttp(): Content {
-        val expectedContent = Content(
-            id = UUID.randomUUID().toString(),
-            createdOn = Instant.now().minus(faker.random().nextLong(20), ChronoUnit.MINUTES).epochSecond
-        )
+        val expectedContent = ContentGenerator.generateValidContent()
 
         mockMvc.perform(
             MockMvcRequestBuilders.post("$CONTENT_ROUTE/add")
