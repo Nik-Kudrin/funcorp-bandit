@@ -89,7 +89,7 @@ class BanditContentRestEndpointTests {
         // view all content
         content.forEach { addViewToContentViaHttp(it.id) }
 
-        val likedContent = content.shuffled().take(7).apply { forEach { addLikeToContentViaHttp(it.id) } }
+        val likedContent = content.shuffled().take(7).onEach { addLikeToContentViaHttp(it.id) }
 
         val resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/play/${UUID.randomUUID()}"))
             .andExpect(MockMvcResultMatchers.status().isOk)
@@ -125,7 +125,7 @@ class BanditContentRestEndpointTests {
         val storedContent = getContentViaHttp(expectedContent.id)
 
         expectedContent.apply {
-            views.putIfAbsent(userId, view)
+            views.put(userId, view)
             attempts++
         }
         storedContent.shouldBe(expectedContent)

@@ -64,11 +64,14 @@ class ContentService : IContentService {
         val content = optional.get()
 
         // "fake" view for user, when it just got content (this view will be outdated after some time)
-        val view: ContentEvent = if (watchedOn.isBlank()) {
-            content.attempts++
+        val view: ContentEvent = if (watchedOn.isBlank())
             ContentEvent(userId, EventType.View, FAKE_VIEW_DATE)
-        } else
+        else
             ContentEvent(userId, EventType.View, watchedOn)
+
+        // increase counter only in case, if there was no view before
+        if (!content.views.containsKey(userId))
+            content.attempts++
 
         content.views[userId] = view
 

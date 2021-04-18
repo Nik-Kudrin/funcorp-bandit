@@ -90,9 +90,4 @@ class ContentServiceTest {
             .get()
             .shouldBe(expectedContent.apply { likes.putIfAbsent(userId, like) })
     }
-
-    @Test
-    fun addLikeScoreCalculationTest() {
-        TODO("Not implemented yet")
-    }
 }
