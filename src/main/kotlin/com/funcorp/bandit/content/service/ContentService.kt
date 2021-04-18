@@ -5,6 +5,7 @@ import com.funcorp.bandit.algorithm.ICalculateScoreStrategy
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
+import com.funcorp.bandit.content.model.FAKE_VIEW_DATE
 import com.funcorp.bandit.content.repository.IContentRepository
 import kotlinx.coroutines.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -61,12 +62,12 @@ class ContentService : IContentService {
         if (optional.isEmpty) return Optional.empty()
 
         val content = optional.get()
-        content.attempts++
 
         // "fake" view for user, when it just got content (this view will be outdated after some time)
-        val view: ContentEvent = if (watchedOn.isBlank())
-            ContentEvent(userId, EventType.View, null)
-        else
+        val view: ContentEvent = if (watchedOn.isBlank()) {
+            content.attempts++
+            ContentEvent(userId, EventType.View, FAKE_VIEW_DATE)
+        } else
             ContentEvent(userId, EventType.View, watchedOn)
 
         content.views[userId] = view
@@ -82,6 +83,7 @@ class ContentService : IContentService {
 
         val content = optional.get()
         content.attempts--
+        content.views.remove(userId)
         contentRepository.save(content)
     }
 
@@ -95,7 +97,7 @@ class ContentService : IContentService {
 
             if (optional.isPresent) {
                 val view = optional.get().views[userId]
-                if (view != null && view.eventTime == null)
+                if (view != null && view.eventTime == FAKE_VIEW_DATE)
                     deleteFakeView(contentId, userId)
             }
         }

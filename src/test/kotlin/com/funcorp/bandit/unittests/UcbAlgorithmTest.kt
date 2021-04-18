@@ -6,6 +6,7 @@ import com.funcorp.bandit.algorithm.Ucb1Algorithm
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.generators.ContentGenerator
 import com.funcorp.bandit.integrationtests.BanditContentRestEndpointTests
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.doubles.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.shouldBe
@@ -48,8 +49,10 @@ class UcbAlgorithmTest {
         val promisingItems = ucb1Algorithm
             .selectMostPromisingItems(contentItems, itemsCount = requestedItemsNumberToReturn)
 
-        promisingItems.size.shouldBe(expectedItemsNumberReturned)
-        promisingItems.shouldBe(contentItems.take(n = expectedItemsNumberReturned).map { it.id })
+        assertSoftly {
+            promisingItems.size.shouldBe(expectedItemsNumberReturned)
+            promisingItems.shouldBe(contentItems.take(n = expectedItemsNumberReturned).map { it.id })
+        }
     }
 
     @Test
@@ -67,8 +70,10 @@ class UcbAlgorithmTest {
         val promisingItems = ucb1Algorithm
             .selectMostPromisingItems(contentItems, itemsCount = requestedItemsNumberToReturn)
 
-        promisingItems.size.shouldBe(requestedItemsNumberToReturn)
-        promisingItems.shouldBe(contentItems.take(n = requestedItemsNumberToReturn).map { it.id })
+        assertSoftly {
+            promisingItems.size.shouldBe(requestedItemsNumberToReturn)
+            promisingItems.shouldBe(contentItems.take(n = requestedItemsNumberToReturn).map { it.id })
+        }
     }
 
     @Test
@@ -98,11 +103,13 @@ class UcbAlgorithmTest {
         val promisingItems = ucb1Algorithm
             .selectMostPromisingItems(contentItems.shuffled(), itemsCount = requestedItemsNumberToReturn)
 
-        promisingItems.size.shouldBe(requestedItemsNumberToReturn)
+        assertSoftly {
+            promisingItems.size.shouldBe(requestedItemsNumberToReturn)
 
-        log.info("Promising items:")
-        promisingItems.forEach { log.info(it) }
-        promisingItems.shouldContainAll(expectedItems.map { it.id })
+            log.info("Promising items:")
+            promisingItems.forEach { log.info(it) }
+            promisingItems.shouldContainAll(expectedItems.map { it.id })
+        }
     }
 
     @Test
