@@ -29,19 +29,19 @@ class VirtualUser(private val mockMvc: MockMvc) {
     fun act() {
         val contentList = getSuggestedContent()
 
-        runBlocking { delay(15.seconds) }
+        runBlocking { delay(5.seconds) }
 
         val contentToWatch = contentList.take(Random.nextInt(until = contentList.size))
         contentToWatch.forEach {
             mockMvc.addViewToContentViaHttp(it, userId)
-            runBlocking { delay(5.seconds) }
+            runBlocking { delay(1.seconds) }
         }
 
         val contentToLike = contentToWatch
             .filter { Random.nextDouble(0.05) > LoadTestEnvironment.getContentDistributionPercentage(it) }
         contentToLike.forEach {
             mockMvc.addLikeToContentViaHttp(it, userId)
-            runBlocking { delay(5.seconds) }
+            runBlocking { delay(1.seconds) }
         }
     }
 }
