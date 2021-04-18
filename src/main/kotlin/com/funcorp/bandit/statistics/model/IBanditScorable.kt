@@ -6,7 +6,7 @@ interface IBanditScorable<T> {
     /**
      * How many times items was accessed
      */
-    var attempts: Int
+    var attempts: Long
 
     /**
      * Calculated score for item

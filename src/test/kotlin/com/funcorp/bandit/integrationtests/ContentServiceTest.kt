@@ -42,7 +42,10 @@ class ContentServiceTest {
             it.addView(expectedContent.id, userId, watchedOn = view.eventTime.toInstant().epochSecond.toString())
         }
             .get()
-            .shouldBe(expectedContent.apply { views.putIfAbsent(userId, view) })
+            .shouldBe(expectedContent.apply {
+                views.putIfAbsent(userId, view)
+                attempts++
+            })
     }
 
     @Test

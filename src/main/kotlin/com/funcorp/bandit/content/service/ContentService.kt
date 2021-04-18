@@ -17,7 +17,7 @@ class ContentService : IContentService {
     private lateinit var contentRepository: IContentRepository
 
     companion object {
-        protected var updateStrategy: ICalculateScoreStrategy = AverageUpdateStrategy()
+        private val updateStrategy: ICalculateScoreStrategy = AverageUpdateStrategy()
     }
 
     @Transactional

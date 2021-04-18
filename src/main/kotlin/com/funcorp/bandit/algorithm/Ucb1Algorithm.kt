@@ -2,6 +2,7 @@ package com.funcorp.bandit.algorithm
 
 import com.funcorp.bandit.statistics.model.IBanditScorable
 import kotlin.math.ln
+import kotlin.math.min
 import kotlin.math.sqrt
 
 /**
@@ -13,23 +14,30 @@ import kotlin.math.sqrt
 class Ucb1Algorithm : BanditAlgorithm {
 
     override fun <T> selectMostPromisingItems(items: List<IBanditScorable<T>>, itemsCount: Int): List<T> {
-        var totalAttemptsCount = 0
+        var totalAttemptsCount = 0L
 
-        val notExploredItems = items.filter { it.attempts == 0 }
+        val notExploredItems = items.filter { it.attempts == 0L }
+        if (notExploredItems.size >= itemsCount)
+            return notExploredItems.take(itemsCount).map { it.id }
 
-        if (notExploredItems.size >= itemsCount) return notExploredItems.map { it.id }
-
-        totalAttemptsCount += items.sumBy { it.attempts }
-        val remainingItems = itemsCount - notExploredItems.size
+        totalAttemptsCount = items.map { it.attempts }.sum()
 
         val ucbAlgorithmScores = items.map {
             val bonus = sqrt(2 * ln(totalAttemptsCount.toDouble()) / it.attempts)
             Pair(it.id, it.statisticalScore + bonus)
         }
 
-        return ucbAlgorithmScores
+        val promisingItems = ucbAlgorithmScores
             .sortedBy { it.second }
-            .takeLast(remainingItems)
+            .takeLast(itemsCount)
             .map { it.first }
+
+        // if have not enough NOT explored items
+        return notExploredItems
+            .map { it.id }
+            .toMutableList()
+            // add promising items to end of list of not explored
+            .also { it.addAll(promisingItems) }
+            .take(min(items.size, itemsCount))
     }
 }

@@ -23,6 +23,6 @@ class BanditLoadTest {
         val entity = restTemplate.getForEntity<String>("/play/13")
 
         entity.statusCode.shouldBe(HttpStatus.OK)
-        entity.body!!.toInt().shouldBe(1)
+        TODO("IMPLEMENT")
     }
 }

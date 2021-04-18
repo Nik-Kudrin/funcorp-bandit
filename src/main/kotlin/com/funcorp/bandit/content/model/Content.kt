@@ -15,7 +15,12 @@ data class Content(
     val createdOn: Date = Date(),
 
     val views: MutableMap<String, ContentEvent> = mutableMapOf<String, ContentEvent>(),
-    val likes: MutableMap<String, ContentEvent> = mutableMapOf<String, ContentEvent>()
+    val likes: MutableMap<String, ContentEvent> = mutableMapOf<String, ContentEvent>(),
+
+    override var attempts: Long = 0L,
+
+    // TODO: move statistics to dedicated document ?
+    override var statisticalScore: Double = 0.0
 ) : IBanditScorable<String> {
     /**
      * [createdOn] - Unix time (epoch seconds)
@@ -26,9 +31,4 @@ data class Content(
      * [createdOn] - Unix time (epoch seconds)
      */
     constructor(id: String, createdOn: Long) : this(id, createdOn.toDate())
-
-    override var attempts: Int = 0
-
-    // TODO: calculate in dedicated document / collection ?
-    override var statisticalScore: Double = 0.0
 }

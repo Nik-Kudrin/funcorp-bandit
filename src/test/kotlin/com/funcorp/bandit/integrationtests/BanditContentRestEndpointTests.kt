@@ -5,6 +5,7 @@ import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
 import com.funcorp.bandit.generators.ContentGenerator
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
@@ -14,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.Instant
 import java.util.*
@@ -25,7 +25,6 @@ import java.util.*
 class BanditContentRestEndpointTests {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
 
     private val mapper = ObjectMapper()
     private final val CONTENT_ROUTE = "/content"
@@ -46,6 +45,32 @@ class BanditContentRestEndpointTests {
         return expectedContent
     }
 
+    private fun addLikeToContentViaHttp(contentId: String): Pair<String, ContentEvent> {
+        val userId = UUID.randomUUID().toString()
+        val like = ContentEvent(userId, EventType.Like, Instant.now().epochSecond.toString())
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/likes/add")
+                .queryParam("userId", userId)
+                .queryParam("likedOn", like.eventTime.toInstant().epochSecond.toString())
+        ).andExpect(MockMvcResultMatchers.status().isOk)
+
+        return Pair(userId, like)
+    }
+
+    private fun addViewToContentViaHttp(contentId: String): Pair<String, ContentEvent> {
+        val userId = UUID.randomUUID().toString()
+        val view = ContentEvent(userId, EventType.View, Instant.now().epochSecond.toString())
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/views/add")
+                .queryParam("userId", userId)
+                .queryParam("watchedOn", view.eventTime.toInstant().epochSecond.toString())
+        ).andExpect(MockMvcResultMatchers.status().isOk)
+
+        return Pair(userId, view)
+    }
+
     private inline fun <reified T> ResultActions.deserializeResponse(): T {
         return mapper.readValue(this.andReturn().response.contentAsString, T::class.java)
     }
@@ -58,13 +83,20 @@ class BanditContentRestEndpointTests {
     }
 
     @Test
-    fun play_Get() {
-        val result = mockMvc.perform(MockMvcRequestBuilders.get("/play/13"))
-            .andDo(MockMvcResultHandlers.print())
+    fun play_GetContentShouldReturn() {
+        val content = (0 until 20).map { addContentViaHttp() }
+
+        // view all content
+        content.forEach { addViewToContentViaHttp(it.id) }
+
+        val likedContent = content.shuffled().take(7).apply { forEach { addLikeToContentViaHttp(it.id) } }
+
+        val resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/play/${UUID.randomUUID()}"))
             .andExpect(MockMvcResultMatchers.status().isOk)
 
-        // TODO: validate
-        log.info(result.toString())
+        val prioritizedItems = resultActions.deserializeResponse<List<String>>()
+
+        prioritizedItems.shouldContainAll(likedContent.map { it.id })
     }
 
     @Test
@@ -77,15 +109,8 @@ class BanditContentRestEndpointTests {
     @Test
     fun likeShouldBeStoredInDb() {
         val expectedContent = addContentViaHttp()
-        val userId = UUID.randomUUID().toString()
-        val like = ContentEvent(userId, EventType.Like, Instant.now().epochSecond.toString())
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("$CONTENT_ROUTE/${expectedContent.id}/likes/add")
-                .queryParam("userId", userId)
-                .queryParam("likedOn", like.eventTime.toInstant().epochSecond.toString())
-        ).andExpect(MockMvcResultMatchers.status().isOk)
-
+        val (userId, like) = addLikeToContentViaHttp(expectedContent.id)
         val storedContent = getContentViaHttp(expectedContent.id)
 
         expectedContent.likes.putIfAbsent(userId, like)
@@ -95,18 +120,14 @@ class BanditContentRestEndpointTests {
     @Test
     fun viewShouldBeStoredInDb() {
         val expectedContent = addContentViaHttp()
-        val userId = UUID.randomUUID().toString()
-        val view = ContentEvent(userId, EventType.View, Instant.now().epochSecond.toString())
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("$CONTENT_ROUTE/${expectedContent.id}/views/add")
-                .queryParam("userId", userId)
-                .queryParam("watchedOn", view.eventTime.toInstant().epochSecond.toString())
-        ).andExpect(MockMvcResultMatchers.status().isOk)
-
+        val (userId, view) = addViewToContentViaHttp(expectedContent.id)
         val storedContent = getContentViaHttp(expectedContent.id)
 
-        expectedContent.views.putIfAbsent(userId, view)
+        expectedContent.apply {
+            views.putIfAbsent(userId, view)
+            attempts++
+        }
         storedContent.shouldBe(expectedContent)
     }
 }
