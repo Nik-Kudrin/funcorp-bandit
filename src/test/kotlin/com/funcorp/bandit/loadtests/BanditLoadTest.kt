@@ -15,10 +15,8 @@ import kotlin.time.toDuration
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class BanditLoadTest {
+class BanditLoadTest @Autowired constructor(private val mockMvc: MockMvc) {
     // TODO: migrate to TestRestTemplate
-    @Autowired
-    private lateinit var mockMvc: MockMvc
 
     companion object {
         private val log = LoggerFactory.getLogger(BanditLoadTest::class.java)

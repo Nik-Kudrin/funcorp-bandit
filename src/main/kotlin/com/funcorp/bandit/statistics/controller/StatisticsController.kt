@@ -1,7 +1,7 @@
 package com.funcorp.bandit.statistics.controller
 
 import com.funcorp.bandit.algorithm.Ucb1Algorithm
-import com.funcorp.bandit.content.service.ContentService
+import com.funcorp.bandit.content.service.BanditContentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/play")
-class StatisticsController {
-    @Autowired
-    private lateinit var contentService: ContentService
+class StatisticsController @Autowired constructor(private val contentService: BanditContentService) {
 
     companion object {
         private val ucb1Algorithm = Ucb1Algorithm()

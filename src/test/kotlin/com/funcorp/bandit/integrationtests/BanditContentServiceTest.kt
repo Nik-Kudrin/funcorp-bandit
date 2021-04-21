@@ -3,7 +3,7 @@ package com.funcorp.bandit.integrationtests
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
 import com.funcorp.bandit.content.model.FAKE_VIEW_DATE
-import com.funcorp.bandit.content.service.ContentService
+import com.funcorp.bandit.content.service.BanditContentService
 import com.funcorp.bandit.generators.ContentGenerator
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -16,12 +16,9 @@ import java.time.Instant
 import java.util.*
 
 @SpringBootTest
-class ContentServiceTest {
-    @Autowired
-    private lateinit var contentService: ContentService
-
+class BanditContentServiceTest @Autowired constructor(private val contentService: BanditContentService) {
     companion object {
-        private val log = LoggerFactory.getLogger(ContentServiceTest::class.java)
+        private val log = LoggerFactory.getLogger(BanditContentServiceTest::class.java)
     }
 
     @Test

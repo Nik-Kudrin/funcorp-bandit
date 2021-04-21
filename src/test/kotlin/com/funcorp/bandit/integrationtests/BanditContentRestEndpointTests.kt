@@ -16,10 +16,7 @@ internal val CONTENT_ROUTE = "/content"
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BanditContentRestEndpointTests {
-    @Autowired
-    private lateinit var mockMvc: MockMvc
-
+class BanditContentRestEndpointTests @Autowired constructor(private val mockMvc: MockMvc) {
     companion object {
         private val log = LoggerFactory.getLogger(BanditContentRestEndpointTests::class.java)
     }

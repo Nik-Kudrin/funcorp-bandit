@@ -1,6 +1,6 @@
 package com.funcorp.bandit.content.scheduler
 
-import com.funcorp.bandit.content.service.ContentService
+import com.funcorp.bandit.content.service.BanditContentService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Scheduled
@@ -13,13 +13,10 @@ import kotlin.time.measureTime
 
 
 @Component
-class CleanupScheduler {
+class CleanupScheduler @Autowired constructor(private val contentService: BanditContentService) {
     companion object {
         private val log = LoggerFactory.getLogger(CleanupScheduler::class.java)
     }
-
-    @Autowired
-    private lateinit var contentService: ContentService
 
     // every 2 minutes
     @Scheduled(fixedRate = 2 * 60 * 1000)

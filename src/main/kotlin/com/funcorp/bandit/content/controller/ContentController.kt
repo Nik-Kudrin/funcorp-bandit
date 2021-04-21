@@ -1,7 +1,7 @@
 package com.funcorp.bandit.content.controller
 
 import com.funcorp.bandit.content.model.Content
-import com.funcorp.bandit.content.service.ContentService
+import com.funcorp.bandit.content.service.BanditContentService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/content")
-class ContentController {
+class ContentController @Autowired constructor(private val contentService: BanditContentService) {
     companion object {
         private val log = LoggerFactory.getLogger(ContentController::class.java)
     }
-
-    @Autowired
-    private lateinit var contentService: ContentService
 
     @Transactional
     @PostMapping(value = ["/add"])
