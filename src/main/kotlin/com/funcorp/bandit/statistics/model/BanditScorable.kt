@@ -1,6 +1,6 @@
 package com.funcorp.bandit.statistics.model
 
-interface IBanditScorable<T> {
+interface BanditScorable<T> {
     val id: T
 
     /**

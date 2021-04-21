@@ -1,7 +1,7 @@
 package com.funcorp.bandit.content.service
 
 import com.funcorp.bandit.algorithm.AverageUpdateStrategy
-import com.funcorp.bandit.algorithm.ICalculateScoreStrategy
+import com.funcorp.bandit.algorithm.CalculateScoreStrategy
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
@@ -19,7 +19,7 @@ class BanditContentService @Autowired constructor(private val contentRepository:
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     companion object {
-        private val updateStrategy: ICalculateScoreStrategy = AverageUpdateStrategy()
+        private val updateStrategy: CalculateScoreStrategy = AverageUpdateStrategy()
     }
 
     @Transactional
@@ -38,7 +38,6 @@ class BanditContentService @Autowired constructor(private val contentRepository:
         else Optional.empty()
     }
 
-    @Transactional
     fun addLike(contentId: String, userId: String, likedOn: String): Optional<Content> {
         val optional = contentRepository.findById(contentId)
 
@@ -52,7 +51,6 @@ class BanditContentService @Autowired constructor(private val contentRepository:
         return Optional.of(contentRepository.save(content))
     }
 
-    @Transactional
     fun addView(contentId: String, userId: String, watchedOn: String = ""): Optional<Content> {
         val optional = contentRepository.findById(contentId)
 
@@ -75,7 +73,6 @@ class BanditContentService @Autowired constructor(private val contentRepository:
         return Optional.of(contentRepository.save(content))
     }
 
-    @Transactional
     fun deleteFakeView(contentId: String, userId: String) {
         val optional = contentRepository.findById(contentId)
 

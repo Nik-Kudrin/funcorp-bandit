@@ -1,7 +1,7 @@
 package com.funcorp.bandit.content.model
 
 import com.funcorp.bandit.extensions.toDate
-import com.funcorp.bandit.statistics.model.IBanditScorable
+import com.funcorp.bandit.statistics.model.BanditScorable
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
@@ -28,7 +28,7 @@ data class Content(
 
     // TODO: move statistics to dedicated document ?
     override var statisticalScore: Double = 0.0
-) : IBanditScorable<String> {
+) : BanditScorable<String> {
     /**
      * [createdOn] - Unix time (epoch seconds)
      */

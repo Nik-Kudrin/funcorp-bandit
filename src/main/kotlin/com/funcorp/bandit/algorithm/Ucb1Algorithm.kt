@@ -1,6 +1,6 @@
 package com.funcorp.bandit.algorithm
 
-import com.funcorp.bandit.statistics.model.IBanditScorable
+import com.funcorp.bandit.statistics.model.BanditScorable
 import kotlin.math.ln
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -13,17 +13,18 @@ import kotlin.math.sqrt
  */
 class Ucb1Algorithm : BanditAlgorithm {
 
-    override fun <T> selectMostPromisingItems(items: List<IBanditScorable<T>>, itemsCount: Int): List<T> {
+    override fun <T> selectMostPromisingItems(items: List<BanditScorable<T>>, itemsCount: Int): List<T> {
         var totalAttemptsCount = 0L
 
         val notExploredItems = items.filter { it.attempts == 0L }
         if (notExploredItems.size >= itemsCount)
             return notExploredItems.take(itemsCount).map { it.id }
 
-        totalAttemptsCount = items.map { it.attempts }.sum()
+        totalAttemptsCount = items.sumOf { it.attempts }
+        val attemptsLogarithm = 2 * ln(totalAttemptsCount.toDouble())
 
         val ucbAlgorithmScores = items.map {
-            val bonus = sqrt(2 * ln(totalAttemptsCount.toDouble()) / it.attempts)
+            val bonus = sqrt(attemptsLogarithm / it.attempts)
             Pair(it.id, it.statisticalScore + bonus)
         }
 

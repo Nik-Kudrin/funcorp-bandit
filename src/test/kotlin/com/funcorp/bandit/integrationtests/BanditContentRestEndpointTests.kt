@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.util.*
 
-internal val CONTENT_ROUTE = "/content"
+internal const val CONTENT_ROUTE = "/content"
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -20,6 +20,8 @@ class BanditContentRestEndpointTests @Autowired constructor(private val mockMvc:
     companion object {
         private val log = LoggerFactory.getLogger(BanditContentRestEndpointTests::class.java)
     }
+
+    // TODO: Just examples of tests. Not complete coverage though.
 
     @Test
     fun play_GetContentShouldReturnMostPromisingItems() {
@@ -64,7 +66,7 @@ class BanditContentRestEndpointTests @Autowired constructor(private val mockMvc:
         val storedContent = mockMvc.getContentViaHttp(expectedContent.id)
 
         expectedContent.apply {
-            views.put(userId, view)
+            views[userId] = view
             attempts++
         }
         storedContent.shouldBe(expectedContent)

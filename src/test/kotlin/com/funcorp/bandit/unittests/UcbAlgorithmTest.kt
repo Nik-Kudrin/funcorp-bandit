@@ -1,7 +1,7 @@
 package com.funcorp.bandit.unittests
 
 import com.funcorp.bandit.algorithm.AverageUpdateStrategy
-import com.funcorp.bandit.algorithm.ICalculateScoreStrategy
+import com.funcorp.bandit.algorithm.CalculateScoreStrategy
 import com.funcorp.bandit.algorithm.Ucb1Algorithm
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.generators.ContentGenerator
@@ -20,7 +20,7 @@ import java.util.stream.Stream
 class UcbAlgorithmTest {
     companion object {
         private val ucb1Algorithm = Ucb1Algorithm()
-        private val updateStrategy: ICalculateScoreStrategy = AverageUpdateStrategy()
+        private val updateStrategy: CalculateScoreStrategy = AverageUpdateStrategy()
         private val log = LoggerFactory.getLogger(BanditContentRestEndpointTests::class.java)
 
         @JvmStatic
@@ -35,6 +35,8 @@ class UcbAlgorithmTest {
             )
         }
     }
+
+    // TODO: Just examples of tests. Not complete coverage though.
 
     @ParameterizedTest
     @MethodSource("takeFirstNonExploredItemsDataProvider")
@@ -88,7 +90,7 @@ class UcbAlgorithmTest {
         // increase attempts for some of the items - shuffle list
         contentItems = contentItems.shuffled()
         contentItems.take(contentItemsCount - requestedItemsNumberToReturn)
-            .apply { forEach { it.attempts++ } }
+            .onEach { it.attempts++ }
 
         log.info("Source items: ")
         contentItems.forEach { log.info(it.toString()) }

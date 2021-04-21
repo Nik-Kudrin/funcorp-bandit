@@ -18,10 +18,10 @@ class LoadTestEnvironment {
         fun prepareContentData(mockMvc: MockMvc, contentNumber: Int = 3_000) {
             log.info("Preparing $contentNumber content items ...")
 
-            content = (0 until contentNumber).map {
+            content = (0 until contentNumber).associate {
                 val item = mockMvc.addContentViaHttp()
                 item.id to Pair(item, Random.nextDouble(0.0, 0.05))
-            }.toMap()
+            }
 
             log.info("Content prepared")
         }

@@ -21,6 +21,8 @@ class BanditContentServiceTest @Autowired constructor(private val contentService
         private val log = LoggerFactory.getLogger(BanditContentServiceTest::class.java)
     }
 
+    // TODO: Just examples of tests. Not complete coverage though.
+
     @Test
     fun insertContentTest() {
         val expectedContent = ContentGenerator.generateValidContent()

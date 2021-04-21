@@ -1,10 +1,10 @@
 package com.funcorp.bandit.algorithm
 
-class AverageUpdateStrategy : ICalculateScoreStrategy {
+class AverageUpdateStrategy : CalculateScoreStrategy {
     override fun calculateScore(attempts: Long, score: Double, reward: Double): Double {
-        val score = (attempts - 1) / attempts.toDouble() * score + 1 / attempts.toDouble() * reward
+        val calculatedScore = (attempts - 1) / attempts.toDouble() * score + 1 / attempts.toDouble() * reward
 
-        return if (score.isNaN()) 0.0
-        else score
+        return if (calculatedScore.isNaN()) 0.0
+        else calculatedScore
     }
 }

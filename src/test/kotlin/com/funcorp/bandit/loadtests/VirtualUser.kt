@@ -19,7 +19,7 @@ class VirtualUser(private val mockMvc: MockMvc) {
         private val log = LoggerFactory.getLogger(VirtualUser::class.java)
     }
 
-    fun getSuggestedContent(): List<String> {
+    private fun getSuggestedContent(): List<String> {
         val resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/play/$userId"))
         log.info("Request executed on /play endpoint by user $userId")
 

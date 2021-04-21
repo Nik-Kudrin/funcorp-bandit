@@ -11,6 +11,8 @@ class ContentModelTest {
         private val log = LoggerFactory.getLogger(ContentModelTest::class.java)
     }
 
+    // TODO: Just examples of tests. Not complete coverage though.
+
     @Test
     fun unixTimestamp_ToDate() {
         val expected = Instant.ofEpochSecond(9999999)
