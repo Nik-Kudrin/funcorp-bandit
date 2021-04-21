@@ -32,7 +32,7 @@ internal fun MockMvc.addLikeToContentViaHttp(
     contentId: String,
     userId: String = UUID.randomUUID().toString()
 ): Pair<String, ContentEvent> {
-    val like = ContentEvent(userId, EventType.Like, Instant.now().epochSecond.toString())
+    val like = ContentEvent(userId, EventType.LIKE, Instant.now().epochSecond.toString())
 
     this.perform(
         MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/likes/add")
@@ -49,7 +49,7 @@ internal fun MockMvc.addViewToContentViaHttp(
     contentId: String,
     userId: String = UUID.randomUUID().toString()
 ): Pair<String, ContentEvent> {
-    val view = ContentEvent(userId, EventType.View, Instant.now().epochSecond.toString())
+    val view = ContentEvent(userId, EventType.VIEW, Instant.now().epochSecond.toString())
 
     this.perform(
         MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/views/add")

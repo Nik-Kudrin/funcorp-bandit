@@ -39,7 +39,7 @@ class BanditContentServiceTest @Autowired constructor(private val contentService
     fun addViewToContentTest() {
         val expectedContent = ContentGenerator.generateValidContent()
         val userId = UUID.randomUUID().toString()
-        val view = ContentEvent(userId, EventType.View, Instant.now().epochSecond.toString())
+        val view = ContentEvent(userId, EventType.VIEW, Instant.now().epochSecond.toString())
 
         contentService.let {
             it.insert(expectedContent)
@@ -56,7 +56,7 @@ class BanditContentServiceTest @Autowired constructor(private val contentService
     fun addFakeViewToContentTest() {
         val expectedContent = ContentGenerator.generateValidContent()
         val userId = UUID.randomUUID().toString()
-        val view = ContentEvent(userId, EventType.View, FAKE_VIEW_DATE)
+        val view = ContentEvent(userId, EventType.VIEW, FAKE_VIEW_DATE)
 
         val content = contentService.let {
             it.insert(expectedContent)
@@ -78,7 +78,7 @@ class BanditContentServiceTest @Autowired constructor(private val contentService
     fun addLikeToContentTest() {
         val expectedContent = ContentGenerator.generateValidContent()
         val userId = UUID.randomUUID().toString()
-        val like = ContentEvent(userId, EventType.Like, Instant.now().epochSecond.toString())
+        val like = ContentEvent(userId, EventType.LIKE, Instant.now().epochSecond.toString())
 
         contentService.let {
             it.insert(expectedContent)

@@ -47,7 +47,7 @@ class BanditContentService @Autowired constructor(private val contentRepository:
         val content = optional.get()
         // Recalculate score
         content.statisticalScore = updateStrategy.calculateScore(content.attempts, content.statisticalScore, 1.0)
-        content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.Like, likedOn))
+        content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.LIKE, likedOn))
 
         return Optional.of(contentRepository.save(content))
     }
@@ -62,9 +62,9 @@ class BanditContentService @Autowired constructor(private val contentRepository:
 
         // "fake" view for user, when it just got content (this view will be outdated after some time)
         val view: ContentEvent = if (watchedOn.isBlank())
-            ContentEvent(userId, EventType.View, FAKE_VIEW_DATE)
+            ContentEvent(userId, EventType.VIEW, FAKE_VIEW_DATE)
         else
-            ContentEvent(userId, EventType.View, watchedOn)
+            ContentEvent(userId, EventType.VIEW, watchedOn)
 
         // increase counter only in case, if there was no view before
         if (!content.views.containsKey(userId))
