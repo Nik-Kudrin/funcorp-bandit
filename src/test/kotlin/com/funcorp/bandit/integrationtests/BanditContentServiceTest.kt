@@ -4,6 +4,7 @@ import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
 import com.funcorp.bandit.content.model.FAKE_VIEW_DATE
 import com.funcorp.bandit.content.service.BanditContentService
+import com.funcorp.bandit.extensions.toDate
 import com.funcorp.bandit.generators.ContentGenerator
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -41,7 +42,7 @@ class BanditContentServiceTest @Autowired constructor(private val contentService
     fun addViewToContentTest() {
         val expectedContent = ContentGenerator.generateValidContent()
         val userId = UUID.randomUUID().toString()
-        val view = ContentEvent(userId, EventType.VIEW, Instant.now().epochSecond.toString())
+        val view = ContentEvent(userId, EventType.VIEW, Instant.now().epochSecond.toDate())
 
         contentService.let {
             it.insert(expectedContent)
@@ -80,7 +81,7 @@ class BanditContentServiceTest @Autowired constructor(private val contentService
     fun addLikeToContentTest() {
         val expectedContent = ContentGenerator.generateValidContent()
         val userId = UUID.randomUUID().toString()
-        val like = ContentEvent(userId, EventType.LIKE, Instant.now().epochSecond.toString())
+        val like = ContentEvent(userId, EventType.LIKE, Instant.now().epochSecond.toDate())
 
         contentService.let {
             it.insert(expectedContent)

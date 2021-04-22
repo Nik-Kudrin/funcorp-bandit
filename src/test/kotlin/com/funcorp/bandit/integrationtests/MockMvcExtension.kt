@@ -3,6 +3,7 @@ package com.funcorp.bandit.integrationtests
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
+import com.funcorp.bandit.extensions.toDate
 import com.funcorp.bandit.generators.ContentGenerator
 import com.funcorp.bandit.loadtests.BanditLoadTest
 import org.slf4j.LoggerFactory
@@ -32,7 +33,7 @@ internal fun MockMvc.addLikeToContentViaHttp(
     contentId: String,
     userId: String = UUID.randomUUID().toString()
 ): Pair<String, ContentEvent> {
-    val like = ContentEvent(userId, EventType.LIKE, Instant.now().epochSecond.toString())
+    val like = ContentEvent(userId, EventType.LIKE, Instant.now().epochSecond.toDate())
 
     this.perform(
         MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/likes/add")
@@ -49,7 +50,7 @@ internal fun MockMvc.addViewToContentViaHttp(
     contentId: String,
     userId: String = UUID.randomUUID().toString()
 ): Pair<String, ContentEvent> {
-    val view = ContentEvent(userId, EventType.VIEW, Instant.now().epochSecond.toString())
+    val view = ContentEvent(userId, EventType.VIEW, Instant.now().epochSecond.toDate())
 
     this.perform(
         MockMvcRequestBuilders.post("$CONTENT_ROUTE/$contentId/views/add")

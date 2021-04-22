@@ -7,6 +7,7 @@ import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
 import com.funcorp.bandit.content.model.FAKE_VIEW_DATE
 import com.funcorp.bandit.content.repository.ContentRepository
+import com.funcorp.bandit.extensions.toDate
 import kotlinx.coroutines.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -46,7 +47,7 @@ class BanditContentService @Autowired constructor(private val contentRepository:
         val content = optional.get()
         // Recalculate score
         content.statisticalScore = scoreStrategy.calculateScore(content.attempts, content.statisticalScore, 1.0)
-        content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.LIKE, likedOn))
+        content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.LIKE, likedOn.toDate()))
 
         return Optional.of(contentRepository.save(content))
     }
@@ -62,7 +63,7 @@ class BanditContentService @Autowired constructor(private val contentRepository:
         val view: ContentEvent = if (watchedOn.isBlank())
             ContentEvent(userId, EventType.VIEW, FAKE_VIEW_DATE)
         else
-            ContentEvent(userId, EventType.VIEW, watchedOn)
+            ContentEvent(userId, EventType.VIEW, watchedOn.toDate())
 
         // increase counter only in case, if there was no view before
         if (!content.views.containsKey(userId))
@@ -73,7 +74,7 @@ class BanditContentService @Autowired constructor(private val contentRepository:
         return Optional.of(contentRepository.save(content))
     }
 
-    fun deleteFakeView(contentId: String, userId: String) {
+    suspend fun deleteFakeView(contentId: String, userId: String) {
         val optional = contentRepository.findById(contentId)
 
         if (optional.isEmpty) return

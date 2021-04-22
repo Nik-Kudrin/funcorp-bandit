@@ -2,6 +2,7 @@ package com.funcorp.bandit.content.controller
 
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.service.BanditContentService
+import com.funcorp.bandit.extensions.toDate
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -19,7 +20,7 @@ class ContentController @Autowired constructor(private val contentService: Bandi
     @Transactional
     @PostMapping(value = ["/add"])
     fun add(@RequestParam("id") id: String, @RequestParam("timestamp") timestamp: String): ResponseEntity<String> {
-        val content = Content(id, timestamp)
+        val content = Content(id, timestamp.toDate())
 
         if (!contentService.insert(content))
             return ResponseEntity("Content with id $id already exist", HttpStatus.CONFLICT)
