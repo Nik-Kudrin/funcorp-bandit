@@ -1,8 +1,10 @@
 package com.funcorp.bandit.content.scheduler
 
+import com.funcorp.bandit.cache.CacheExtensions.Companion.contentCache
 import com.funcorp.bandit.content.service.BanditContentService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.CacheManager
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -13,9 +15,12 @@ import kotlin.time.measureTime
 
 
 @Component
-class CleanupScheduler @Autowired constructor(private val contentService: BanditContentService) {
+class OldContentCleanupScheduler @Autowired constructor(
+    private val contentService: BanditContentService,
+    private val cacheManager: CacheManager
+) {
     companion object {
-        private val log = LoggerFactory.getLogger(CleanupScheduler::class.java)
+        private val log = LoggerFactory.getLogger(OldContentCleanupScheduler::class.java)
     }
 
     // every 2 minutes
@@ -28,9 +33,9 @@ class CleanupScheduler @Autowired constructor(private val contentService: Bandit
             val oldestTimeBoundary = Date.from(Instant.now().minus(30, ChronoUnit.MINUTES))
 
             // TODO: use MongoTemplate and DynamicQuery to filter unnecessary content on DB side
-            val contentToDelete = contentService.getAll()
-                .filter { it.createdOn.before(oldestTimeBoundary) }
+            val contentToDelete = contentService.getAll().filter { it.createdOn.before(oldestTimeBoundary) }
 
+            contentToDelete.onEach { cacheManager.contentCache.evictIfPresent(it.id) }
             contentService.delete(contentToDelete)
         }
 

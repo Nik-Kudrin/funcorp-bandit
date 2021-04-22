@@ -18,17 +18,16 @@ class StatisticsController @Autowired constructor(private val contentService: Ba
 
     @GetMapping(value = ["/{userId}"], produces = ["application/json"])
     fun play(@PathVariable("userId") userId: String): List<String> {
-        // TODO: use MongoTemplate and DynamicQuery to filter unnecessary content on DB side
+        // TODO: MongoTemplate and DynamicQuery to filter unnecessary content on DB side
         val contentItems = contentService.getAll().filter { !it.views.containsKey(userId) }
 
         val promisingItems = ucb1Algorithm.selectMostPromisingItems(contentItems, itemsCount = 10)
 
-        // During 5 minutes after content was given to user it counts as viewed
-        // After 5 minutes those "fake" views will be deleted
+        // During N minutes after content was given to user it counts as viewed
+        // After N minutes those "fake" views will be deleted
         promisingItems.forEach {
             contentService.apply {
                 addView(contentId = it, userId = userId, watchedOn = "")
-                fakeViewActualizator(contentId = it, userId = userId)
             }
         }
 

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -17,19 +16,20 @@ class ContentController @Autowired constructor(private val contentService: Bandi
         private val log = LoggerFactory.getLogger(ContentController::class.java)
     }
 
-    @Transactional
     @PostMapping(value = ["/add"])
-    fun add(@RequestParam("id") id: String, @RequestParam("timestamp") timestamp: String): ResponseEntity<String> {
+    fun add(
+        @RequestParam("id") id: String,
+        @RequestParam("timestamp") timestamp: String
+    ): ResponseEntity<String> {
         val content = Content(id, timestamp.toDate())
 
         if (!contentService.insert(content))
-            return ResponseEntity("Content with id $id already exist", HttpStatus.CONFLICT)
+            return ResponseEntity("Content with id '$id' already exist", HttpStatus.CONFLICT)
 
         log.debug("Content has been added: $content")
         return ResponseEntity(HttpStatus.CREATED)
     }
 
-    @Transactional
     @PostMapping(value = ["/{id}/views/add"])
     fun addView(
         @PathVariable("id") id: String,
@@ -45,7 +45,6 @@ class ContentController @Autowired constructor(private val contentService: Bandi
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @Transactional
     @PostMapping(value = ["/{id}/likes/add"])
     fun addLike(
         @PathVariable("id") id: String,

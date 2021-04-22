@@ -1,9 +1,12 @@
 REST service, that gives content sorted by UCB1 algorithm. (Multi-Armed Bandit algorithm)  
 Spring Boot, Kotlin
 
-Task description [here](FunCorp_Task.pdf)
+Task description [here](FunCorp_Task.pdf)  
+Restrictions:  
+Caching is used in service.  
+In case of deployment many instances of the service - take a look at the external cache provider (Redis).
 
-#### Environment preparation
+#### Environment
 
 1) Run MongoDB
 
@@ -15,7 +18,7 @@ where `/opt/mongodb_volume` - your local data volume for mongo
 
 2) Run service ```./gradlew clean bootRun```
 
-3) Endpoints
+#### Endpoints
    - Get list of content, using UCB1 `/play/{userId}`
    - Add new content `/content/add?id={id}&createdOn={unix_timestamp}`
    - Get content info `/content/{id}`
@@ -24,4 +27,5 @@ where `/opt/mongodb_volume` - your local data volume for mongo
 
 #### Tests
 
-- Performance test [here](src/test/kotlin/com/funcorp/bandit/loadtests/BanditLoadTest.kt)
+- Test coverage is not complete. Only examples of test are provided
+- Example of performance test [here](src/test/kotlin/com/funcorp/bandit/loadtests/BanditLoadTest.kt)

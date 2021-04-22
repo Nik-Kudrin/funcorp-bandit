@@ -19,6 +19,10 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:2.4.5")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.4.5")
+    implementation("org.springframework.boot:spring-boot-starter-cache:2.4.5")
+//    implementation("org.ehcache:ehcache:3.9.3")
+//    implementation("javax.cache:cache-api:1.1.1")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
     implementation("com.fasterxml.jackson.module:jackson-module-parameter-names")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
