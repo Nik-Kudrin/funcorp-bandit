@@ -1,6 +1,6 @@
 package com.funcorp.bandit.algorithm
 
-class AverageUpdateStrategy : CalculateScoreStrategy {
+class AverageScoreStrategy : ScoreStrategy {
     override fun calculateScore(attempts: Long, score: Double, reward: Double): Double {
         val calculatedScore = (attempts - 1) / attempts.toDouble() * score + 1 / attempts.toDouble() * reward
 

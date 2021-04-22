@@ -1,7 +1,7 @@
 package com.funcorp.bandit.unittests
 
-import com.funcorp.bandit.algorithm.AverageUpdateStrategy
-import com.funcorp.bandit.algorithm.CalculateScoreStrategy
+import com.funcorp.bandit.algorithm.AverageScoreStrategy
+import com.funcorp.bandit.algorithm.ScoreStrategy
 import com.funcorp.bandit.algorithm.Ucb1Algorithm
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.generators.ContentGenerator
@@ -20,7 +20,7 @@ import java.util.stream.Stream
 class UcbAlgorithmTest {
     companion object {
         private val ucb1Algorithm = Ucb1Algorithm()
-        private val updateStrategy: CalculateScoreStrategy = AverageUpdateStrategy()
+        private val scoreStrategy: ScoreStrategy = AverageScoreStrategy()
         private val log = LoggerFactory.getLogger(BanditContentRestEndpointTests::class.java)
 
         @JvmStatic
@@ -97,7 +97,7 @@ class UcbAlgorithmTest {
 
         // calculate score for every item
         contentItems.forEach {
-            it.statisticalScore = updateStrategy.calculateScore(it.attempts, it.statisticalScore, 1.0)
+            it.statisticalScore = scoreStrategy.calculateScore(it.attempts, it.statisticalScore, 1.0)
         }
 
         val expectedItems = contentItems.sortedBy { it.statisticalScore }.takeLast(requestedItemsNumberToReturn)
@@ -121,7 +121,7 @@ class UcbAlgorithmTest {
         for (iteration in 0..10) {
             // emulate "LIKE"
             content.attempts++
-            val score = updateStrategy.calculateScore(content.attempts, content.statisticalScore, 1.0)
+            val score = scoreStrategy.calculateScore(content.attempts, content.statisticalScore, 1.0)
             score.shouldBeGreaterThanOrEqual(content.statisticalScore)
             content.statisticalScore = score
         }

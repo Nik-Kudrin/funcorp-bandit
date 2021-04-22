@@ -1,7 +1,7 @@
 package com.funcorp.bandit.content.service
 
-import com.funcorp.bandit.algorithm.AverageUpdateStrategy
-import com.funcorp.bandit.algorithm.CalculateScoreStrategy
+import com.funcorp.bandit.algorithm.AverageScoreStrategy
+import com.funcorp.bandit.algorithm.ScoreStrategy
 import com.funcorp.bandit.content.model.Content
 import com.funcorp.bandit.content.model.ContentEvent
 import com.funcorp.bandit.content.model.EventType
@@ -19,7 +19,7 @@ class BanditContentService @Autowired constructor(private val contentRepository:
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     companion object {
-        private val updateStrategy: CalculateScoreStrategy = AverageUpdateStrategy()
+        private val scoreStrategy: ScoreStrategy = AverageScoreStrategy()
     }
 
     @Transactional
@@ -45,7 +45,7 @@ class BanditContentService @Autowired constructor(private val contentRepository:
 
         val content = optional.get()
         // Recalculate score
-        content.statisticalScore = updateStrategy.calculateScore(content.attempts, content.statisticalScore, 1.0)
+        content.statisticalScore = scoreStrategy.calculateScore(content.attempts, content.statisticalScore, 1.0)
         content.likes.putIfAbsent(userId, ContentEvent(userId, EventType.LIKE, likedOn))
 
         return Optional.of(contentRepository.save(content))

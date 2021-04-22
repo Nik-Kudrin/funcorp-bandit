@@ -1,5 +1,5 @@
 package com.funcorp.bandit.algorithm
 
-interface CalculateScoreStrategy {
+interface ScoreStrategy {
     fun calculateScore(attempts: Long, score: Double, reward: Double): Double
 }
