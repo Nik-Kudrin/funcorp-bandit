@@ -85,8 +85,10 @@ class BanditContentService @Autowired constructor(
         val view: ContentEvent = if (watchedOn.isBlank()) {
             FakeViewsContainer.addFakeView(contentId, userId, Instant.now().epochSecond.toDate())
             ContentEvent(userId, EventType.VIEW, FAKE_VIEW_DATE)
-        } else
+        } else {
+            FakeViewsContainer.removeFakeView(com.funcorp.bandit.content.service.FakeViewKey(contentId, userId))
             ContentEvent(userId, EventType.VIEW, watchedOn.toDate())
+        }
 
         // increase counter only in case, if there was no view before
         if (!content.views.containsKey(userId))

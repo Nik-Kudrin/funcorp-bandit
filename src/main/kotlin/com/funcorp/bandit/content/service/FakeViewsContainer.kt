@@ -16,7 +16,7 @@ object FakeViewsContainer {
     private val fakeViews = ConcurrentHashMap<FakeViewKey, Date>()
 
     fun addFakeView(contentId: String, userId: String, insertionTime: Date) {
-        fakeViews[FakeViewKey(contentId, userId)] = insertionTime
+        fakeViews[com.funcorp.bandit.content.service.FakeViewKey(contentId, userId)] = insertionTime
     }
 
     fun removeFakeView(key: FakeViewKey) = fakeViews.remove(key)
