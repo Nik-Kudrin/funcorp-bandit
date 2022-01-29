@@ -1,4 +1,4 @@
-REST service, that gives content sorted by UCB1 algorithm. (Multi-Armed Bandit algorithm)  
+REST service, that returns content sorted by UCB1 algorithm. (Multi-Armed Bandit algorithm)  
 Spring Boot, Kotlin
 
 Task description [here](FunCorp_Task.pdf)  
